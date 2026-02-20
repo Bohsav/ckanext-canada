@@ -57,7 +57,7 @@ in
         echo "Creating user"
         createuser -S -D -R -P ${ckan-config.ckan-username}
         echo "Creating db"
-        createde -O ${ckan-config.ckan-username} ${ckan-config.ckan-defaultdb} -E utf-8
+        createdb -O ${ckan-config.ckan-username} ${ckan-config.ckan-defaultdb} -E utf-8
       '';
       description = "(first time) Setup PostgreSQL for CKAN for initial installation";
     };
