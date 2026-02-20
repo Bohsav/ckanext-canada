@@ -31,3 +31,14 @@ htmlcov/**
 .npm
 .test_durations
 .mypy_cache
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+.envrc
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
