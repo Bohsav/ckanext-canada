@@ -1,0 +1,18 @@
+{% ckan_extends %}
+
+{% block subtitle %}
+  {% if pkg.type != 'prop' %}
+    {{ _('Resources') }} - {{ h.get_translated(pkg, 'title') }}
+  {% endif %}
+{% endblock %}
+
+{% block primary_content_inner %}
+  {% if pkg.type != 'prop' %}
+    <div class="canada-reorder-resources-wrapper">{{ super() }}</div>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ h.cdts_asset('/js/deps/jquery.dataTables.min.js') }}" integrity="sha384-b1RBSdBjGOkT2YrnjRU/Xz0do2szxDwYCnBdFesxWlyT7m6YrfGtjYaz1MBGYvEo" crossorigin="anonymous" nonce="{{- h.get_inline_script_nonce() -}}" defer></script>
+  {{ super() }}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% ckan_extends %}
+
+{% block subtitle %}
+  {{ user.display_name }}
+{% endblock %}
+
+{% block page_heading %}
+  {{ super.super() }}
+{% endblock %}
+
+{% block primary_content_inner %}
+  <h2 class="wb-inv">{{ _('Activity Stream') }}</h2>
+  {% snippet 'snippets/stream.html', activity_stream=activity_stream, id=id, object_type='user' %}
+  {% snippet 'snippets/pagination.html', newer_activities_url=newer_activities_url, older_activities_url=older_activities_url %}
+{% endblock %}

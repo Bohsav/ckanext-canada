@@ -12,10 +12,12 @@ setup(
     # message extraction at
     # http://babel.pocoo.org/docs/messages/#extraction-method-mapping-and-configuration
     message_extractors={
-        'ckanext': [
-            ('**.py', 'python', None),
-            ('**.js', 'javascript', None),
-            ('**/templates/**.html', 'ckan', None),
+        "ckanext": [
+            ("**/tables/**.yaml", "pd", None),
+            ("**.py", "python", None),
+            ("**.js", "javascript", None),
+            ("**/templates/**.html", "ckan", None),
         ],
     }
 )
+
