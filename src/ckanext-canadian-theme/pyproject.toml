@@ -22,7 +22,7 @@ dependencies = []
 Homepage = "https://github.com/Bohsav/ckanext-canadian-theme"
 
 [project.entry-points."ckan.plugins"]
-canadian_theme = "ckanext.canadian_theme.plugin.plugin:CanadianThemePlugin"
+canadian_theme = "ckanext.canadian_theme.plugin:CanadianThemePlugin"
 
 
 [build-system]
