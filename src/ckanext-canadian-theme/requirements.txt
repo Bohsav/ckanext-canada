@@ -6,5 +6,5 @@ gevent==25.5.1  # req for threading
 
 ckanext-xloader @ git+https://github.com/ckan/ckanext-xloader.git@2.2.0
 ckanext-security @ git+https://github.com/data-govt-nz/ckanext-security.git@4.1.1
-ckanext-recombinant @ git+https://github.com/open-data/ckanext-recombinant.git@main
+ckanext-recombinant @ git+https://github.com/open-data/ckanext-recombinant.git@master
 ckanext-scheming @ git+https://github.com/ckan/ckanext-scheming.git@release-3.1.0
