@@ -1,0 +1,14 @@
+# canadian_theme-js:
+#   filter: rjsmin
+#   output: ckanext-canadian_theme/%(version)s-canadian_theme.js
+#   contents:
+#     - js/canadian_theme.js
+#   extra:
+#     preload:
+#       - base/main
+
+# canadian_theme-css:
+#   filter: cssrewrite
+#   output: ckanext-canadian_theme/%(version)s-canadian_theme.css
+#   contents:
+#     - css/canadian_theme.css

@@ -1,0 +1,45 @@
+[project]
+name = "ckanext-canadian-theme"
+version = "0.0.1"
+description = "ckanext-canada decoupling of Canadian's theme for base CKAN"
+readme = "README.md"
+authors = [
+    {name = "Bohdan Savchuk", email = "bohdan.savchuk@agr.gc.ca"}
+]
+license = {text = "AGPL"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+keywords = [ "A", "space", "separated", "list", "of", "keywords", ]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/Bohsav/ckanext-canadian-theme"
+
+[project.entry-points."ckan.plugins"]
+canadian_theme = "ckanext.canadian_theme.plugin:CanadianThemePlugin"
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+        "ignore::sqlalchemy.exc.SADeprecationWarning",
+        "ignore::sqlalchemy.exc.SAWarning",
+        "ignore::DeprecationWarning",
+]
+addopts = "--ckan-ini test.ini"
+
+[tool.ruff]
+line-length = 127
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+
