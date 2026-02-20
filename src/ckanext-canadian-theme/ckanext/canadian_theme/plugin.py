@@ -5,13 +5,12 @@ from ckan.types import Any, Callable, Dict
 from ckanext.canadian_theme import helpers
 
 
-@p.toolkit.blanket.config_declarations
 class CanadianThemePlugin(p.SingletonPlugin):
     p.implements(p.IConfigurer)
     p.implements(p.ITemplateHelpers)
 
     # IConfigurer
-    def update_config(self, config: "CKANConfig"):
+    def update_config(self, config: CKANConfig):
         p.toolkit.add_template_directory(config, "./templates")
         p.toolkit.add_public_directory(config, "./public")
         p.toolkit.add_resource("./public/static/js", "js")
