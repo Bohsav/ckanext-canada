@@ -30,7 +30,7 @@ ENV CKAN_INI=${APP_DIR}/ckan.ini
 ENV PIP_SRC=${SRC_DIR}
 ENV CKAN_STORAGE_PATH=/var/lib/ckan
 # Build the fork
-ENV GIT_URL=https://github.com/open-data/ckan.git
+ENV GIT_URL=https://github.com/Bohsav/ckan.git
 
 # Customize these in the environment (.env) file if needed
 ENV CKAN_SITE_URL=http://localhost:5000
@@ -83,7 +83,7 @@ RUN pip3 install -U pip && \
     pip3 install -U "setuptools==81" && \
     pip3 install uwsgi && \
     cd ${SRC_DIR} && \
-    pip3 install -e git+${GIT_URL}@${CKAN_REF}#egg=ckan && \
+    pip3 install -e git+${GIT_URL}@canada-v2.10-dev#egg=ckan && \
     cd ckan && \
     pip3 install --no-binary markdown -r requirements.txt && \
     # Install CKAN envvars to support loading config from environment variables
@@ -144,7 +144,8 @@ RUN pip3 install -e git+https://github.com/open-data/ckanext-fluent@master#egg=c
 # NOTE: requirements for ckanext-fluent are installed separately
 RUN pip3 install six 
 #
-RUN pip3 install -e git+https://github.com/open-data/ckanext-security.git@${CKAN_REF}#egg=ckanext-security 
+# RUN pip3 install -e git+https://github.com/open-data/ckanext-security.git@${CKAN_REF}#egg=ckanext-security 
+RUN pip3 install -e git+https://github.com/Bohsav/ckanext-security.git@canada-v2.10-dockerfile#egg=ckanext-security 
 RUN pip3 install -r ckanext-security/requirements.txt 
 RUN pip3 install -e git+https://github.com/open-data/ckanext-validation.git@${CKAN_REF}#egg=ckanext-validation 
 RUN pip3 install -r ckanext-validation/requirements.txt 
@@ -163,23 +164,23 @@ RUN pip3 install -e git+https://github.com/open-data/ckanext-citeproc.git@main#e
 RUN pip3 install -r ckanext-citeproc/requirements.txt 
 RUN pip3 install -e git+https://github.com/open-data/ckanext-dsaudit.git@master#egg=ckanext-dsaudit 
 # Additional dependencies
-RUN pip3 install --force-reinstall git+https://github.com/open-data/frictionless-py.git@${CKAN_REF}#egg=frictionless
+RUN pip3 install --force-reinstall git+https://github.com/open-data/frictionless-py.git@${CKAN_REF}#egg=frictionless 
 RUN pip3 install -U requests[security]
 # Install ckanext-canada theming
-RUN pip3 install -e git+https://github.com/open-data/ckanext-canada.git@master#egg=ckanext-canada 
+RUN pip3 install -e git+https://github.com/Bohsav/ckanext-canada.git@dockerfile#egg=ckanext-canada 
 RUN pip3 install -r ckanext-canada/requirements.txt 
+RUN chown -R ckan:ckan-sys ckanext-canada/ckanext/canada/i18n 
 # ckanext-canada: upgrade bad requirement
 RUN pip3 install --force-reinstall git+https://github.com/jazzband/geojson.git@3.0.0#egg=geojson 
 RUN pip3 install --force-reinstall git+https://github.com/chardet/chardet.git@5.2.0#egg=chardet 
 # DEVELOPMENT
 RUN pip3 install -r ckan/dev-requirements.txt 
-RUN cd ckanext-canada && python setup.py develop
+RUN cd ckanext-canada && python setup.py develop 
 
-WORKDIR /
+WORKDIR / 
 
-# Copy security config
-COPY --chown=ckan-sys:ckan-sys who.ini ${APP_DIR}/who.ini
-COPY --chown=ckan-sys:ckan-sys who-security.ini ${APP_DIR}/who-security.ini
+# Copy security config for a registry
+COPY --chown=ckan-sys:ckan-sys who-security.ini ${APP_DIR}/who.ini
 
 COPY --chown=ckan-sys:ckan-sys local-extensions ${SRC_DIR}/local-extensions
 
@@ -197,7 +198,7 @@ COPY --chown=ckan-sys:ckan-sys patches ${APP_DIR}/patches
 
 # Copy overrides as necessary
 COPY --chown=ckan-sys:ckan-sys setup.override/prerun.py.override ${APP_DIR}/prerun.py
-COPY --chown=ckan-sys:ckan-sys setup.override/start_ckan.sh.override ${APP_DIR}/start_ckan.sh
+COPY --chown=ckan-sys:ckan-sys setup.override/start_ckan_dev.sh.override ${APP_DIR}/start_ckan.sh
 
 # Ownership chages
 RUN mkdir -p ${APP_DIR} /etc/ckan /var/lib/ckan \
@@ -211,9 +212,12 @@ COPY --chown=ckan-sys:ckan-sys ckanext-canada.base.ini ${APP_DIR}/canada.base.in
 COPY --chown=ckan-sys:ckan-sys ckanext-canada.public.ini ${APP_DIR}/public.base.ini
 COPY --chown=ckan-sys:ckan-sys ckanext-canada.registry.ini ${APP_DIR}/registry.base.ini
 
-USER ckan
+RUN apt-get install -y vim 
+
+USER ckan 
 # Merge default config
 RUN ckan config-tool ${CKAN_INI} -f ${APP_DIR}/canada.base.ini 
+# Apply the type
 RUN ckan config-tool ${CKAN_INI} -f ${APP_DIR}/${CKAN_TYPE}.base.ini 
 
 # Apply patches
