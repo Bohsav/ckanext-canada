@@ -145,7 +145,7 @@ RUN pip3 install -e git+https://github.com/open-data/ckanext-fluent@master#egg=c
 RUN pip3 install six 
 #
 # RUN pip3 install -e git+https://github.com/open-data/ckanext-security.git@${CKAN_REF}#egg=ckanext-security 
-RUN pip3 install -e git+https://github.com/Bohsav/ckanext-security.git@canada-v2.10-dockerfile#egg=ckanext-security 
+RUN pip3 install -e git+https://github.com/open-data/ckanext-security.git@canada-v2.10#egg=ckanext-security 
 RUN pip3 install -r ckanext-security/requirements.txt 
 RUN pip3 install -e git+https://github.com/open-data/ckanext-validation.git@${CKAN_REF}#egg=ckanext-validation 
 RUN pip3 install -r ckanext-validation/requirements.txt 
@@ -165,7 +165,7 @@ RUN pip3 install -r ckanext-citeproc/requirements.txt
 RUN pip3 install -e git+https://github.com/open-data/ckanext-dsaudit.git@master#egg=ckanext-dsaudit 
 # Additional dependencies
 RUN pip3 install --force-reinstall git+https://github.com/open-data/frictionless-py.git@${CKAN_REF}#egg=frictionless 
-RUN pip3 install -U requests[security]
+RUN pip3 install -U requests[security] 
 # Install ckanext-canada theming
 RUN pip3 install -e git+https://github.com/Bohsav/ckanext-canada.git@dockerfile#egg=ckanext-canada 
 RUN pip3 install -r ckanext-canada/requirements.txt 
