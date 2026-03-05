@@ -176,6 +176,8 @@ RUN pip3 install --force-reinstall git+https://github.com/chardet/chardet.git@5.
 # DEVELOPMENT
 RUN pip3 install -r ckan/dev-requirements.txt 
 RUN cd ckanext-canada && python setup.py develop 
+# Degrade markupsafe because there are formatting errors with the latest version that gets installed from somewhere
+RUN pip3 install --force-reinstall git+https://github.com/pallets/markupsafe.git@2.1.1#egg=markupsafe
 
 WORKDIR / 
 
