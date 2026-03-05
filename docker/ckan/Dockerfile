@@ -200,7 +200,7 @@ COPY --chown=ckan-sys:ckan-sys patches ${APP_DIR}/patches
 
 # Copy overrides as necessary
 COPY --chown=ckan-sys:ckan-sys setup.override/prerun.py.override ${APP_DIR}/prerun.py
-COPY --chown=ckan-sys:ckan-sys setup.override/start_ckan_dev.sh.override ${APP_DIR}/start_ckan.sh
+COPY --chown=ckan-sys:ckan-sys setup.override/start_ckan.sh.override ${APP_DIR}/start_ckan.sh
 
 # Ownership chages
 RUN mkdir -p ${APP_DIR} /etc/ckan /var/lib/ckan \
