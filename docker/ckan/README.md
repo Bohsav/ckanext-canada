@@ -11,3 +11,5 @@ Types: base, registry, and public
 
 Setup attempts to use sane default config values, but it should be tailored for
 specific use using `envvars`.
+
+NOTE: right now it assumes registry
