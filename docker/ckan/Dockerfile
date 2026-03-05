@@ -174,8 +174,8 @@ RUN chown -R ckan:ckan-sys ckanext-canada/ckanext/canada/i18n
 RUN pip3 install --force-reinstall git+https://github.com/jazzband/geojson.git@3.0.0#egg=geojson 
 RUN pip3 install --force-reinstall git+https://github.com/chardet/chardet.git@5.2.0#egg=chardet 
 # DEVELOPMENT
-RUN pip3 install -r ckan/dev-requirements.txt 
-RUN cd ckanext-canada && python setup.py develop 
+# RUN pip3 install -r ckan/dev-requirements.txt 
+# RUN cd ckanext-canada && python setup.py develop 
 # Degrade markupsafe because there are formatting errors with the latest version that gets installed from somewhere
 RUN pip3 install --force-reinstall git+https://github.com/pallets/markupsafe.git@2.1.1#egg=markupsafe
 
@@ -213,8 +213,6 @@ RUN chmod g+rx ${APP_DIR}/start_ckan.sh;
 COPY --chown=ckan-sys:ckan-sys ckanext-canada.base.ini ${APP_DIR}/canada.base.ini
 COPY --chown=ckan-sys:ckan-sys ckanext-canada.public.ini ${APP_DIR}/public.base.ini
 COPY --chown=ckan-sys:ckan-sys ckanext-canada.registry.ini ${APP_DIR}/registry.base.ini
-
-RUN apt-get install -y vim 
 
 USER ckan 
 # Merge default config
