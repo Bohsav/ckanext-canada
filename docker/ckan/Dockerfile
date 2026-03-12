@@ -30,12 +30,10 @@ ENV CKAN_INI=${APP_DIR}/ckan.ini
 ENV PIP_SRC=${SRC_DIR}
 ENV CKAN_STORAGE_PATH=/var/lib/ckan
 # Build the fork
-ENV GIT_URL=https://github.com/Bohsav/ckan.git
+ENV GIT_URL=https://github.com/open-data/ckan.git
 
 # Customize these in the environment (.env) file if needed
 ENV CKAN_SITE_URL=http://localhost:5000
-# Do not assume any plugins
-# ENV CKAN__PLUGINS="image_view text_view recline_view datastore envvars"
 
 # UWSGI options
 ENV UWSGI_HARAKIRI=50
@@ -83,7 +81,7 @@ RUN pip3 install -U pip && \
     pip3 install -U "setuptools==81" && \
     pip3 install uwsgi && \
     cd ${SRC_DIR} && \
-    pip3 install -e git+${GIT_URL}@canada-v2.10-dev#egg=ckan && \
+    pip3 install -e git+${GIT_URL}@${CKAN_REF}#egg=ckan && \
     cd ckan && \
     pip3 install --no-binary markdown -r requirements.txt && \
     # Install CKAN envvars to support loading config from environment variables

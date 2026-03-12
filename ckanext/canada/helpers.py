@@ -62,9 +62,9 @@ def is_registry_domain() -> bool:
         # is the CLI or background system process,
         # run as Registry.
         return True
-    subdomain = uri_parts.netloc.split(".")[0]
+    subdomain = uri_parts.netloc.split('.')[0]
     return True
-    # return re.search(REGISTRY_SUBDOMAIN_MATCH, subdomain) is not None
+    return re.search(REGISTRY_SUBDOMAIN_MATCH, subdomain) is not None
 
 
 def get_translated_t(data_dict: Dict[str, Any], field: str) -> Tuple[str, bool]:

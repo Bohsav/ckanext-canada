@@ -48,13 +48,11 @@ fi
 
 if [ $? -eq 0 ]
 then
-    if [[ "${CKAN_WORKER,,}" == "true" ]]; then
-        # Start the CKAN worker
-        ckan -c "$CKAN_INI" jobs worker $CKAN_WORKER_OPTS
-    else
-        # Start uwsgi serving the CKAN web app
-        uwsgi $UWSGI_OPTS
-    fi
+  if [[ "${CKAN_WORKER,,}" == "true" ]]; then
+    ckan -c $CKAN_INI jobs worker $CKAN_WORKER_OPTS
+  else
+    uwsgi $UWSGI_OPTS
+  fi
 else
   echo "[prerun] failed...not starting CKAN."
 fi

@@ -200,6 +200,13 @@ def create_sysadmin():
         print("[prerun] Made user {0} a sysadmin".format(name))
 
 
+def misc_db_init():
+    print("[prerun] Miscellaneous init; init activity.")
+    cmd = ["ckan", "-c", ckan_ini, "db", "upgrade", "-p", "activity"]
+    out = subprocess.check_output(cmd)
+    print("[prerun] Result: {}".format(out))
+
+
 if __name__ == "__main__":
 
     maintenance = os.environ.get("MAINTENANCE_MODE", "").lower() == "true"
@@ -212,6 +219,7 @@ if __name__ == "__main__":
         init_db()
         check_datastore_db_connection()
         init_datastore_db()
+        misc_db_init()
         check_solr_connection()
         create_sysadmin()
         
