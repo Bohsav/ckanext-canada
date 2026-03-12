@@ -3,8 +3,6 @@
 # 'ckanext' build stage is adapted from https://github.com/ckan/ckan-docker
 # Adapted to build CKAN Canada's fork (https://github.com/open-data/ckan/tree/canada-v2.10)
 
-# NOTE: Development build stripped. Only base, public, and registry for extension are available
-
 FROM python:3.10-slim-bookworm AS python
 
 # ┌─────────────────────────────────────────────────────────────┐
