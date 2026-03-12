@@ -1,13 +1,11 @@
 # Build CKAN with this extension embedded
-# 'ckan' build stage is a copy of https://github.com/ckan/ckan-docker-base
+# 'base' build stage is a copy of https://github.com/ckan/ckan-docker-base
+# 'ckanext' build stage is adapted from https://github.com/ckan/ckan-docker
 # Adapted to build CKAN Canada's fork (https://github.com/open-data/ckan/tree/canada-v2.10)
 
 # NOTE: Development build stripped. Only base, public, and registry for extension are available
 
 FROM python:3.10-slim-bookworm AS python
-
-# base, public, registry
-ENV CKAN_TYPE="registry"
 
 # ┌─────────────────────────────────────────────────────────────┐
 # │                                                             │
@@ -165,30 +163,19 @@ RUN pip3 install -e git+https://github.com/open-data/ckanext-dsaudit.git@master#
 RUN pip3 install --force-reinstall git+https://github.com/open-data/frictionless-py.git@${CKAN_REF}#egg=frictionless 
 RUN pip3 install -U requests[security] 
 # Install ckanext-canada theming
-RUN pip3 install -e git+https://github.com/Bohsav/ckanext-canada.git@dockerfile#egg=ckanext-canada 
+RUN pip3 install -e git+https://github.com/open-data/ckanext-canada.git@master#egg=ckanext-canada 
 RUN pip3 install -r ckanext-canada/requirements.txt 
 RUN chown -R ckan:ckan-sys ckanext-canada/ckanext/canada/i18n 
 # ckanext-canada: upgrade bad requirement
 RUN pip3 install --force-reinstall git+https://github.com/jazzband/geojson.git@3.0.0#egg=geojson 
 RUN pip3 install --force-reinstall git+https://github.com/chardet/chardet.git@5.2.0#egg=chardet 
-# DEVELOPMENT
-# RUN pip3 install -r ckan/dev-requirements.txt 
-# RUN cd ckanext-canada && python setup.py develop 
 # Degrade markupsafe because there are formatting errors with the latest version that gets installed from somewhere
-RUN pip3 install --force-reinstall git+https://github.com/pallets/markupsafe.git@2.1.1#egg=markupsafe
+RUN pip3 install --force-reinstall git+https://github.com/pallets/markupsafe.git@2.1.1#egg=markupsafe 
 
 WORKDIR / 
 
 # Copy security config for a registry
 COPY --chown=ckan-sys:ckan-sys who-security.ini ${APP_DIR}/who.ini
-
-COPY --chown=ckan-sys:ckan-sys local-extensions ${SRC_DIR}/local-extensions
-
-RUN for dir in `ls ${SRC_DIR}/local-extensions`; do \
-    echo "Installing ${dir}" \
-    && pip3 install -e ${SRC_DIR}/local-extensions/${dir}/. \
-    && pip3 install -r ${SRC_DIR}/local-extensions/${dir}/requirements.txt; \
-    done; 
 
 # Copy custom init scripts for container
 COPY --chown=ckan-sys:ckan-sys docker-entrypoint.d/* /docker-entrypoint.d/
@@ -209,14 +196,14 @@ RUN mkdir -p ${APP_DIR} /etc/ckan /var/lib/ckan \
 RUN chmod g+rx ${APP_DIR}/start_ckan.sh;
 
 COPY --chown=ckan-sys:ckan-sys ckanext-canada.base.ini ${APP_DIR}/canada.base.ini
-COPY --chown=ckan-sys:ckan-sys ckanext-canada.public.ini ${APP_DIR}/public.base.ini
+COPY --chown=ckan-sys:ckan-sys ckanext-canada.portal.ini ${APP_DIR}/portal.base.ini
 COPY --chown=ckan-sys:ckan-sys ckanext-canada.registry.ini ${APP_DIR}/registry.base.ini
+
+FROM ckanext AS final
 
 USER ckan 
 # Merge default config
 RUN ckan config-tool ${CKAN_INI} -f ${APP_DIR}/canada.base.ini 
-# Apply the type
-RUN ckan config-tool ${CKAN_INI} -f ${APP_DIR}/${CKAN_TYPE}.base.ini 
 
 # Apply patches
 RUN for d in $APP_DIR/patches/*; do \
@@ -225,6 +212,13 @@ RUN for d in $APP_DIR/patches/*; do \
                 cd $SRC_DIR/`basename "$d"` && echo "$0: Applying patch $f to $SRC_DIR/`basename $d`"; patch -p1 < "$f" ; \
             done ; \
         fi ; \
-    done
+    done 
 
-FROM ckanext AS final
+FROM final AS portal
+
+RUN ckan config-tool ${CKAN_INI} -f ${APP_DIR}/portal.base.ini 
+
+FROM final AS registry
+
+RUN ckan config-tool ${CKAN_INI} -f ${APP_DIR}/registry.base.ini 
+
